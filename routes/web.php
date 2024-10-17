@@ -19,6 +19,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get("/create/class", [SubjectController::class, "create"])->name("subject.create");
     Route::post("/create/class", [SubjectController::class, "store"])->name("subject.store");
+    Route::get("/classes", [SubjectController::class, "index"])->name("subject.index");
+    Route::get("/classes/{subject}", [SubjectController::class, "show"])->name("subject.show");
+    
 });
 
 require __DIR__.'/auth.php';

@@ -44,7 +44,7 @@ class SubjectController extends Controller
      */
     public function show(subject $subject)
     {
-        //
+        return view('subject.show', compact('subject'));
     }
 
     /**
