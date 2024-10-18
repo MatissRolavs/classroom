@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer("user_id");
             $table->integer("subject_id");
+            $table->text("code");
             $table->timestamps();
         });
     }

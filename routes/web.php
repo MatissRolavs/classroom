@@ -2,6 +2,7 @@
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\UserSubjectsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,6 +22,8 @@ Route::middleware('auth')->group(function () {
     Route::post("/create/class", [SubjectController::class, "store"])->name("subject.store");
     Route::get("/classes", [SubjectController::class, "index"])->name("subject.index");
     Route::get("/classes/{subject}", [SubjectController::class, "show"])->name("subject.show");
+
+    Route::post("/classes", [UserSubjectsController::class, "store"])->name("user_subjects.store");
     
 });
 Route::get('/calendar/{month?}/{year?}', [CalendarController::class, 'show']);

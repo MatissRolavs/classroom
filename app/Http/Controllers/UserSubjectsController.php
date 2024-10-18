@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUserSubjectsRequest;
 use App\Http\Requests\UpdateUserSubjectsRequest;
 use App\Models\UserSubjects;
+use App\Models\subject;
 
 class UserSubjectsController extends Controller
 {
@@ -21,7 +22,7 @@ class UserSubjectsController extends Controller
      */
     public function create()
     {
-        //
+        return view('user_subjects.create');
     }
 
     /**
@@ -29,7 +30,23 @@ class UserSubjectsController extends Controller
      */
     public function store(StoreUserSubjectsRequest $request)
     {
-        //
+        $existingSubject = subject::where('code', $request->code)->first();
+
+        if ($existingSubject) {
+            UserSubjects::create([
+                'user_id' => $request->user_id,
+                'subject_id' => $existingSubject->id,
+                "code" => $request->code
+            ]);
+        } else {
+            UserSubjects::create([
+                'user_id' => $request->user_id,
+                'subject_id' => $request->subject_id,
+                "code" => $request->code
+            ]);
+        }
+
+        return redirect()->route('subject.index');
     }
 
     /**

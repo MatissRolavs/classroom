@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoresubjectRequest;
 use App\Http\Requests\UpdatesubjectRequest;
 use App\Models\subject;
+use App\Models\UserSubjects;
 
 class SubjectController extends Controller
 {
@@ -14,7 +15,9 @@ class SubjectController extends Controller
     public function index()
     {
         $subjects = subject::all();
-        return view('subject.index', compact('subjects'));
+        $user_subjects = UserSubjects::all();
+
+        return view('subject.index', compact('subjects'), compact("user_subjects"));
     }
 
     /**
@@ -32,6 +35,7 @@ class SubjectController extends Controller
     {
         subject::create([
             'name' => $request->name,
+            "creator_id" => auth()->user()->id,
             'group' => $request->group,
             'description' => $request->description,
             'code' => $request->code,
