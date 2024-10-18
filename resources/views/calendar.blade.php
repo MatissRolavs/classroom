@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalendārs</title>
+    <title>Callendar</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -53,38 +54,42 @@
         .button:hover {
             background: #0056b3;
         }
+
+        .empty-day {
+            background-color: #f1f1f1;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="navigation">
-        <button class="button" onclick="changeMonth(-1)">&laquo; Iepriekšējais mēnesis</button>
+        <button class="button" onclick="changeMonth(-1)">&laquo; Previous month</button>
         <div class="month">{{ $monthName }} {{ $year }}</div>
-        <button class="button" onclick="changeMonth(1)">Nākamais mēnesis &raquo;</button>
+        <button class="button" onclick="changeMonth(1)">Next month &raquo;</button>
     </div>
 
     <div class="calendar">
-        <div class="day header">P</div>
-        <div class="day header">O</div>
-        <div class="day header">T</div>
-        <div class="day header">C</div>
-        <div class="day header">P</div>
-        <div class="day header">S</div>
-        <div class="day header">Sv</div>
+        <div class="day header">Mon</div>
+        <div class="day header">Tue</div>
+        <div class="day header">Wed</div>
+        <div class="day header">Thu</div>
+        <div class="day header">Fri</div>
+        <div class="day header">Sat</div>
+        <div class="day header">Sun</div>
 
         @php
-            // Aprēķinām sākuma datumu
-            $startOfMonth = Carbon\Carbon::createFromDate($year, $month, 1)->startOfMonth();
-            $startDay = $startOfMonth->copy()->startOfWeek();
+            $startOfMonth = Carbon\Carbon::createFromDate($year, $month, 1);
+            $startDay = $startOfMonth->copy()->startOfWeek(); // First day of the week (could be from the previous month)
+            $endDay = $startOfMonth->copy()->endOfMonth()->endOfWeek(); // Last day of the month plus days until the end of the week
         @endphp
 
-        @for ($day = $startDay; $day->lte($startOfMonth->endOfMonth()); $day->addDay())
+        @for ($day = $startDay; $day->lte($endDay); $day->addDay())
             <div class="day">
-                @if ($day->month == $startOfMonth->month)
+                @if ($day->month == $month)
                     {{ $day->day }}
                 @else
-                    &nbsp; <!-- Tukša vieta, ja diena nav šajā mēnesī -->
+                    <span class="empty-day">&nbsp;</span> <!-- Handle empty days -->
                 @endif
             </div>
         @endfor
@@ -93,10 +98,19 @@
 
 <script>
     function changeMonth(direction) {
-        const currentMonth = {{ $month }};
-        const currentYear = {{ $year }};
-        let month = new Date(new Date(currentYear, currentMonth - 1).setMonth(currentMonth - 1 + direction));
-        window.location.href = `/calendar/${month.getMonth() + 1}/${month.getFullYear()}`;
+        // const currentMonth = {{ $month }};
+        // const currentYear = {{ $year }};
+        // let month = new Date(new Date(currentYear, currentMonth - 1).setMonth(currentMonth - 1 + direction));
+        // window.location.href = `/calendar/${month.getMonth() + 1}/${month.getFullYear()}`;
+
+        let currentMonth = {{ $month }} - 1; // JS month is zero-indexed
+        let currentYear = {{ $year }};
+        
+        let newDate = new Date(currentYear, currentMonth + direction, 1);
+        let newMonth = newDate.getMonth() + 1; // Convert back to 1-indexed
+        let newYear = newDate.getFullYear();
+
+        window.location.href = `/calendar/${newMonth}/${newYear}`;
     }
 </script>
 

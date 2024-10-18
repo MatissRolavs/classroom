@@ -3,8 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\subject;
-use Illuminate\Auth\Access\Response;
+use App\Models\Subject;
 
 class SubjectPolicy
 {
@@ -19,10 +18,12 @@ class SubjectPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, subject $subject): bool
+    public function view(User $user, Subject $subject)
     {
-        //
+    // Your authorization logic here
+    return $user->id === $subject->user_id; // For example, allowing the user to view their own subjects
     }
+
 
     /**
      * Determine whether the user can create models.
@@ -35,7 +36,7 @@ class SubjectPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, subject $subject): bool
+    public function update(User $user, Subject $subject): bool
     {
         //
     }
@@ -43,7 +44,7 @@ class SubjectPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, subject $subject): bool
+    public function delete(User $user, Subject $subject): bool
     {
         //
     }
@@ -51,7 +52,7 @@ class SubjectPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, subject $subject): bool
+    public function restore(User $user, Subject $subject): bool
     {
         //
     }
@@ -59,7 +60,7 @@ class SubjectPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, subject $subject): bool
+    public function forceDelete(User $user, Subject $subject): bool
     {
         //
     }

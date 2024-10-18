@@ -1,10 +1,9 @@
 <?php
-// app/Http/Controllers/CalendarController.php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\Subject;
 
 class CalendarController extends Controller
 {
@@ -26,6 +25,8 @@ class CalendarController extends Controller
         $previousMonth = $date->copy()->subMonth()->month;
         $nextMonth = $date->copy()->addMonth()->month;
 
-        return view('calendar', compact('daysInMonth', 'monthName', 'year', 'month', 'previousMonth', 'nextMonth'));
+        $subjects = Subject::all();
+
+        return view('calendar', compact('daysInMonth', 'monthName', 'year', 'month', 'previousMonth', 'nextMonth', 'subjects'));
     }
 }

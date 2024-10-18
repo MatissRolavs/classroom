@@ -17,8 +17,18 @@
                     </x-nav-link>
 
                     <!-- New Create Subject Link -->
-                    <x-nav-link :href="route('subject.create')" :active="request()->routeIs('subject.create')">
-                        {{ __('Create Subject') }}
+                    @if(Auth::user()->type === 'admin')
+                        <x-nav-link :href="route('subject.create')" :active="request()->routeIs('subject.create')">
+                            {{ __('Create Subject') }}
+                        </x-nav-link>
+                    @endif
+
+                    <x-nav-link :href="route('subject.index')" :active="request()->routeIs('subject.index')">
+                        {{ __('All Subjects') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('calendar.show')" :active="request()->routeIs('calendar.show')">
+                        {{ __('Calendar') }}
                     </x-nav-link>
                 </div>
             </div>
