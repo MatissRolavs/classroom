@@ -9,4 +9,8 @@
             Show invite code
         </button>
     </div>
-
+<form action="{{ route('subject.leave', $subject->id) }}" method="POST">
+    @csrf
+    @method('DELETE')
+    <button type="submit">Leave Class</button>
+</form>

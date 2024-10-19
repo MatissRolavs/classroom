@@ -74,4 +74,11 @@ class SubjectController extends Controller
     {
         //
     }
+
+    public function leave(subject $subject)
+    {
+        $userSubjects = UserSubjects::where('user_id', auth()->user()->id)->where('subject_id', $subject->id)->first();
+        $userSubjects->delete();
+        return redirect()->route("subject.index");
+    }
 }

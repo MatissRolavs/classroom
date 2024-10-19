@@ -10,7 +10,9 @@ use App\Http\Middleware\AdminMiddleware;
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('/admin', function () {
+    return view('admin');
+});
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -33,6 +35,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::post("/classes", [UserSubjectsController::class, "store"])->name("user_subjects.store");
+    Route::delete("/classes/{subject}/leave", [SubjectController::class, "leave"])->name("subject.leave");
     
 
     // Route::post("/classes/{subject}/enroll", [SubjectController::class, "enroll"])->name("subject.enroll");

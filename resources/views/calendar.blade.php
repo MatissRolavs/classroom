@@ -1,3 +1,4 @@
+<x-app-layout>
 <!DOCTYPE html>
 <html lang="lv">
 <head>
@@ -60,6 +61,7 @@
         }
     </style>
 </head>
+
 <body>
 
 <div class="container">
@@ -116,3 +118,4 @@
 
 </body>
 </html>
+</x-app-layout>

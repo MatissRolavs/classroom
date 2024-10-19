@@ -31,21 +31,19 @@ class UserSubjectsController extends Controller
     public function store(StoreUserSubjectsRequest $request)
     {
         $existingSubject = subject::where('code', $request->code)->first();
+        $joinedSubject = UserSubjects::where('subject_id', $existingSubject->id ?? null)->where('user_id', $request->user_id)->first();
 
-        if ($existingSubject) {
+        if (!$existingSubject) {
+            return back()->withErrors(['code' => 'Class with such code does not exist.'])->withInput();
+        }
+
+        if (!$joinedSubject) {
             UserSubjects::create([
                 'user_id' => $request->user_id,
                 'subject_id' => $existingSubject->id,
                 "code" => $request->code
             ]);
-        } else {
-            UserSubjects::create([
-                'user_id' => $request->user_id,
-                'subject_id' => $request->subject_id,
-                "code" => $request->code
-            ]);
-        }
-
+        } 
         return redirect()->route('subject.index');
     }
 
@@ -80,4 +78,6 @@ class UserSubjectsController extends Controller
     {
         //
     }
+    
+   
 }
