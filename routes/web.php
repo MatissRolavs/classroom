@@ -3,9 +3,11 @@
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TasksController;
 use App\Http\Controllers\UserSubjectsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\TaskFilesController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,10 +39,11 @@ Route::middleware('auth')->group(function () {
     Route::post("/classes", [UserSubjectsController::class, "store"])->name("user_subjects.store");
     Route::delete("/classes/{subject}/leave", [SubjectController::class, "leave"])->name("subject.leave");
     
-
+    Route::post("/tasks", [TasksController::class, "store"])->name("task.store");
+    Route::post("/taskFiles", [TaskFilesController::class, "store"])->name("taskFiles.store");	
     // Route::post("/classes/{subject}/enroll", [SubjectController::class, "enroll"])->name("subject.enroll");
     // Route::post("/classes/{subject}/unenroll", [SubjectController::class, "unenroll"])->name("subject.unenroll");
-
+    Route::get("/taskFiles/{taskFiles}", [TaskFilesController::class, "show"])->name("taskFiles.show");
 
     Route::middleware('can:enroll,subject')->group(function () {
         Route::post("/classes/{subject}/enroll", [SubjectController::class, "enroll"])->name("subject.enroll");

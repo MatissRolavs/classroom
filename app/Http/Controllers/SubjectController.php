@@ -6,6 +6,8 @@ use App\Http\Requests\StoresubjectRequest;
 use App\Http\Requests\UpdatesubjectRequest;
 use App\Models\subject;
 use App\Models\UserSubjects;
+use App\Models\Tasks;
+use App\Models\TaskFiles;
 
 class SubjectController extends Controller
 {
@@ -47,8 +49,10 @@ class SubjectController extends Controller
      * Display the specified resource.
      */
     public function show(subject $subject)
-    {
-        return view('subject.show', compact('subject'));
+    {   
+        $tasks = Tasks::all();
+        $taskFiles = TaskFiles::all();
+        return view('subject.show', compact('subject','tasks','taskFiles'));
     }
 
     /**
