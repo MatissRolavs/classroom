@@ -25,6 +25,8 @@
         @enderror
         <button type="submit">Join new class</button>
     </form>
+
+
 </x-app-layout>
        
 
