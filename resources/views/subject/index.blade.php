@@ -15,7 +15,7 @@
                         @foreach($user_subjects as $user_subject)
                             @if($subject->id == $user_subject->subject_id && $user_subject->user_id == auth()->user()->id)
                                 <div class="mt-4">
-                                    <p>{{ $index + 1 }}. Group name: {{ $subject->group }}</p>
+                                    <p>Group name: {{ $subject->group }}</p>
                                     <p>Link to group: <a href="{{ route('subject.show', $subject->id) }}" class="text-blue-600 underline">
                                         {{ $subject->name }}
                                     </a>

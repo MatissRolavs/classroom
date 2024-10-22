@@ -46,6 +46,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post("/comment/create", [TaskCommentsController::class, "store"])->name("comments.store");
 
+    Route::get("/classes/{subject}/participants", [SubjectController::class, "participants"])->name("subject.participants");
+
     Route::middleware('can:enroll,subject')->group(function () {
         Route::post("/classes/{subject}/enroll", [SubjectController::class, "enroll"])->name("subject.enroll");
         Route::post("/classes/{subject}/unenroll", [SubjectController::class, "unenroll"])->name("subject.unenroll");

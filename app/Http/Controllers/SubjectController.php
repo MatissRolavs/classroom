@@ -9,7 +9,7 @@ use App\Models\TaskComments;
 use App\Models\UserSubjects;
 use App\Models\Tasks;
 use App\Models\TaskFiles;
-
+use App\Models\User;
 class SubjectController extends Controller
 {
     /**
@@ -51,10 +51,11 @@ class SubjectController extends Controller
      */
     public function show(subject $subject)
     {   
+        $users = User::all();
         $tasks = Tasks::all();
         $taskFiles = TaskFiles::all();
         $comments = TaskComments::all();
-        return view('subject.show', compact('subject','tasks','taskFiles',"comments"));
+        return view('subject.show', compact('subject','tasks','taskFiles',"comments","users"));
     }
 
     /**
@@ -86,5 +87,11 @@ class SubjectController extends Controller
         $userSubjects = UserSubjects::where('user_id', auth()->user()->id)->where('subject_id', $subject->id)->first();
         $userSubjects->delete();
         return redirect()->route("subject.index");
+    }
+
+    public function participants(){
+        $user_subjects = UserSubjects::all();
+        $users = User::all();
+        return view("subject.participants", compact("user_subjects", "users"));
     }
 }
