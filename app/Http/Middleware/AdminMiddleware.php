@@ -12,22 +12,21 @@ class AdminMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Check if the user is authenticated
-        if (!Auth::check()) {
-            return redirect('/'); // Redirect if not authenticated
+        if(!Auth::check()){
+            return redirect("/");
         }
 
-        // Check if the user is an admin
-        if (Auth::user()->type === 'admin') {
-            return $next($request); // Allow access if admin
-        }
+        $userRole=Auth::user()->role;
 
-        return redirect('/'); // Redirect if not admin
+        if($userRole==2){
+            return $next($request);
+        }else
+        {
+            return redirect("/");
+        }
     }
 }

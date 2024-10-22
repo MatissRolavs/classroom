@@ -3,6 +3,11 @@
         <div class="grid grid-cols-3 gap-8 max-w-6xl w-full">
             <!-- Subject Info Box -->
             @if($subject)
+            @foreach($users as $user)
+                @if($subject->creator_id == $user->id)
+                <h1>Created by {{ $user->name }}</h1>
+                @endif
+            @endforeach
                 <a href="{{ route('subject.participants', $subject->id) }}" class="bg-white p-6 rounded-lg shadow-md col-span-1">View all participants</a>
                 <div class="bg-white p-6 rounded-lg shadow-md col-span-3">
                     <h1 class="text-3xl font-bold">{{ $subject->name }}</h1>
@@ -47,7 +52,7 @@
                 @foreach($tasks as $task)
                     @if($task->class_id == $subject->id)
                         <div class="bg-white p-6 rounded-lg shadow-md mt-4">
-                            <h3 class="text-xl font-bold">{{ $loop->iteration }}. {{ $task->title }}</h3>
+                            <h3 class="text-xl font-bold"> {{ $task->title }}</h3>
                             <p class="mt-2">{{ $task->description }}</p>
 
                             <!-- Task Files Section -->

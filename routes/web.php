@@ -7,22 +7,23 @@ use App\Http\Controllers\TaskCommentsController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\UserSubjectsController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\TaskFilesController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\AdminController;
+use App\Http\Middleware\Admin;
+
 
 Route::get('/', function () {
     return redirect()->route('login');
 });
-Route::get('/admin', function () {
-    return view('admin');
-});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware([AdminMiddleware::class])->group(function () {
-    Route::resource('subject', SubjectController::class);
-});
+
+    
+    
 
 
 Route::middleware('auth')->group(function () {
@@ -47,6 +48,9 @@ Route::middleware('auth')->group(function () {
     Route::post("/comment/create", [TaskCommentsController::class, "store"])->name("comments.store");
 
     Route::get("/classes/{subject}/participants", [SubjectController::class, "participants"])->name("subject.participants");
+
+    Route::get("/register/teacher", [AdminController::class, "create"])->name("users.create");
+    Route::post("/register/teacher", [AdminController::class, "store"])->name("users.store");
 
     Route::middleware('can:enroll,subject')->group(function () {
         Route::post("/classes/{subject}/enroll", [SubjectController::class, "enroll"])->name("subject.enroll");
