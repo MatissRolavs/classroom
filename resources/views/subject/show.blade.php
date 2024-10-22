@@ -40,7 +40,7 @@
                 <input type="hidden" name="task_id" value="{{ $task->id }}">
                 <button type="submit">Upload</button>
             </form>
-        @endif
+        
         <h3>Comments:</h3>
         <form method="POST" action="{{ route('comments.store') }}">
                 @csrf
@@ -52,7 +52,8 @@
                     <button type="submit" style="background-color: #4CAF50; color: white; padding: 14px 20px; margin-left: 10px; border: none; cursor: pointer;">Comment</button>
                 </div>
             </form>
-            <h2 style="text-align: center;">Comments</h2>
+            @endif
+            @if($task->class_id == $subject->id)
             @foreach ($comments as $comment)
                 @if($comment->task_id == $task->id)
             <div style="display: flex; justify-content: center; padding: 10px; border-bottom: 1px solid lightgray;">
@@ -65,6 +66,7 @@
             </div>
                 @endif
             @endforeach
+            @endif
     @endforeach
 </ul>
 
