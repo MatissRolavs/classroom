@@ -10,7 +10,7 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\TaskFilesController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 Route::get('/admin', function () {
     return view('admin');
@@ -41,8 +41,6 @@ Route::middleware('auth')->group(function () {
     
     Route::post("/tasks", [TasksController::class, "store"])->name("task.store");
     Route::post("/taskFiles", [TaskFilesController::class, "store"])->name("taskFiles.store");	
-    // Route::post("/classes/{subject}/enroll", [SubjectController::class, "enroll"])->name("subject.enroll");
-    // Route::post("/classes/{subject}/unenroll", [SubjectController::class, "unenroll"])->name("subject.unenroll");
     Route::get("/taskFiles/{taskFiles}", [TaskFilesController::class, "show"])->name("taskFiles.show");
 
     Route::middleware('can:enroll,subject')->group(function () {
@@ -50,8 +48,6 @@ Route::middleware('auth')->group(function () {
         Route::post("/classes/{subject}/unenroll", [SubjectController::class, "unenroll"])->name("subject.unenroll");
     });
 
-
-    // Route::get('/calendar/{month?}/{year?}', [CalendarController::class, 'show'])->middleware('can:view,App\Models\Subject')->name('calendar.show');
     Route::get('/calendar/{month?}/{year?}', [CalendarController::class, 'show'])->name('calendar.show');
 
 });
