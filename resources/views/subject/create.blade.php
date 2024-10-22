@@ -28,9 +28,7 @@
             </div>
 
             <div class="mt-4">
-                <label for="code">Code</label>
-                <label style="color:gray">(Generated automatically)</label>
-                <input type="text" id="code" name="code" class="block w-full mt-1" value="{{ Str::random(8) }}" required readonly />
+                <input type="hidden" id="code" name="code" class="block w-full mt-1" value="{{ Str::random(8) }}" required readonly />
                 @error('code')
                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                 @enderror
