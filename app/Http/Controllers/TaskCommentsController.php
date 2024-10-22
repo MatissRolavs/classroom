@@ -29,7 +29,14 @@ class TaskCommentsController extends Controller
      */
     public function store(StoreTaskCommentsRequest $request)
     {
-        //
+        $comment = new TaskComments();
+        $comment->user_id = $request->user_id;
+        $comment->task_id = $request->task_id;
+        $comment->comment = $request->comment;
+
+        $comment->save();
+
+        return redirect()->route('subject.show', $request->class_id)->with('message', 'Comment created successfully');
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoresubjectRequest;
 use App\Http\Requests\UpdatesubjectRequest;
 use App\Models\subject;
+use App\Models\TaskComments;
 use App\Models\UserSubjects;
 use App\Models\Tasks;
 use App\Models\TaskFiles;
@@ -52,7 +53,8 @@ class SubjectController extends Controller
     {   
         $tasks = Tasks::all();
         $taskFiles = TaskFiles::all();
-        return view('subject.show', compact('subject','tasks','taskFiles'));
+        $comments = TaskComments::all();
+        return view('subject.show', compact('subject','tasks','taskFiles',"comments"));
     }
 
     /**

@@ -3,6 +3,7 @@
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TaskCommentsController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\UserSubjectsController;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::post("/tasks", [TasksController::class, "store"])->name("task.store");
     Route::post("/taskFiles", [TaskFilesController::class, "store"])->name("taskFiles.store");	
     Route::get("/taskFiles/{taskFiles}", [TaskFilesController::class, "show"])->name("taskFiles.show");
+
+    Route::post("/comment/create", [TaskCommentsController::class, "store"])->name("comments.store");
 
     Route::middleware('can:enroll,subject')->group(function () {
         Route::post("/classes/{subject}/enroll", [SubjectController::class, "enroll"])->name("subject.enroll");
