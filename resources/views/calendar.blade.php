@@ -100,16 +100,12 @@
 
 <script>
     function changeMonth(direction) {
-        // const currentMonth = {{ $month }};
-        // const currentYear = {{ $year }};
-        // let month = new Date(new Date(currentYear, currentMonth - 1).setMonth(currentMonth - 1 + direction));
-        // window.location.href = `/calendar/${month.getMonth() + 1}/${month.getFullYear()}`;
 
-        let currentMonth = {{ $month }} - 1; // JS month is zero-indexed
+        let currentMonth = {{ $month }} - 1;
         let currentYear = {{ $year }};
         
         let newDate = new Date(currentYear, currentMonth + direction, 1);
-        let newMonth = newDate.getMonth() + 1; // Convert back to 1-indexed
+        let newMonth = newDate.getMonth() + 1;
         let newYear = newDate.getFullYear();
 
         window.location.href = `/calendar/${newMonth}/${newYear}`;

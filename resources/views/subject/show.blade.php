@@ -25,74 +25,79 @@
                 </div>
             @endif
 
-            <!-- Tasks Box -->
-            <div class="bg-white p-6 rounded-lg shadow-md col-span-2">
-                <h2 class="text-2xl font-bold">Tasks</h2>
-                <form action="{{ route('task.store') }}" method="POST" class="mt-4">
-                    @csrf
-                    <input type="hidden" name="class_id" value="{{ $subject->id }}">
-                    <input name="title" id="title" placeholder="Enter task name" required class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    <input name="description" id="description" placeholder="Enter task description" required class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 mt-4">
-                        Create
-                    </button>
-                </form>
+            <!-- Task Creation Box -->
+            <div class="col-span-3 flex justify-center">
+                <div class="bg-white p-6 rounded-lg shadow-md w-2/3">
+                    <h2 class="text-2xl font-bold text-center">Create a Task</h2>
+                    <form action="{{ route('task.store') }}" method="POST" class="mt-4">
+                        @csrf
+                        <input type="hidden" name="class_id" value="{{ $subject->id }}">
+                        <input name="title" id="title" placeholder="Enter task name" required class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <input name="description" id="description" placeholder="Enter task description" required class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 mt-4">
+                            Create
+                        </button>
+                    </form>
+                </div>
+            </div>
 
-                <ul class="mt-8">
-                    @foreach($tasks as $task)
-                        @if($task->class_id == $subject->id)
-                            <div class="bg-white p-6 rounded-lg shadow-md mt-4">
-                                <h3 class="text-xl font-bold">{{ $task->title }}</h3>
-                                <p class="mt-2">{{ $task->description }}</p>
-                                @foreach($taskFiles as $taskFile)
-                                    @if($taskFile->task_id == $task->id)
+            <!-- Task List -->
+            <h2 class="text-2xl font-bold text-center col-span-3">Task List</h2>
+            <div class="col-span-3">
+                @foreach($tasks as $task)
+                    @if($task->class_id == $subject->id)
+                        <div class="bg-white p-6 rounded-lg shadow-md mt-4">
+                            <h3 class="text-xl font-bold">{{ $loop->iteration }}. {{ $task->title }}</h3>
+                            <p class="mt-2">{{ $task->description }}</p>
+
+                            <!-- Task Files Section -->
+                            @foreach($taskFiles as $taskFile)
+                                @if($taskFile->task_id == $task->id)
                                     <a href="{{ route('taskFiles.show', $taskFile->id) }}" class="text-blue-600 underline mt-2 block">View file</a>
+                                @endif
+                            @endforeach
+
+                            <!-- File Upload Form -->
+                            <form action="{{ route('taskFiles.store') }}" method="POST" enctype="multipart/form-data" class="mt-4">
+                                @csrf
+                                <div class="flex items-center bg-white p-6 rounded-lg shadow-md">
+                                    <input type="file" name="file" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <input type="hidden" name="task_id" value="{{ $task->id }}">
+                                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 ml-4">
+                                        Upload
+                                    </button>
+                                </div>
+                            </form>
+
+                            <!-- Comments Section -->
+                            <div class="bg-white p-6 rounded-lg shadow-md mt-8">
+                                <h3 class="text-2xl font-bold">Comments</h3>
+                                @foreach($comments as $comment)
+                                    @if($comment->task_id == $task->id)
+                                        <div class="mt-4 border-b border-gray-300 py-2">
+                                            @foreach($users as $user)
+                                                @if($user->id == $comment->user_id)
+                                                    <p><strong>{{ $user->name }}:</strong> {{ $comment->comment }}</p>
+                                                @endif
+                                            @endforeach
+                                        </div>
                                     @endif
                                 @endforeach
 
-                                <form action="{{ route('taskFiles.store') }}" method="POST" enctype="multipart/form-data" class="mt-4">
-                                    @csrf
-                                    <div class="flex items-center">
-                                        <input type="file" name="file" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                        <span id="file-name" class="ml-2 text-gray-600"></span>
-                                    </div>
-                                    <input type="hidden" name="task_id" value="{{ $task->id }}">
-                                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 mt-4">
-                                        Upload
-                                    </button>
-                                </form>
-
-                                <!-- Comments Box for Task -->
-                                <h3 class="text-2xl font-bold mt-8">Comments</h3>
+                                <!-- Add Comment Form -->
                                 <form method="POST" action="{{ route('comments.store') }}" class="mt-4">
                                     @csrf
                                     <input type="hidden" name="task_id" value="{{ $task->id }}">
                                     <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                                     <input type="hidden" name="class_id" value="{{ $task->class_id }}">
-                                    <textarea name="comment" id="comment" cols="30" rows="4" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Leave a comment..." style="padding: 10px;"></textarea>
+                                    <textarea name="comment" id="comment" cols="30" rows="4" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Leave a comment..."></textarea>
                                     <button type="submit" class="bg-green-600 text-white px-6 py-2 mt-4 rounded-md cursor-pointer">Comment</button>
                                 </form>
-
-                                <div class="mt-4">
-                                    @foreach ($comments as $comment)
-                                        @if($comment->task_id == $task->id)
-                                            <div class="mt-4 border-b border-gray-300 py-2">
-                                            @foreach($users as $user)
-                                                @if($user->id == $comment->user_id)
-                                                    <p><strong>{{$user->name}}:</strong> {{ $comment->comment }}</p>
-                                                @endif
-                                            @endforeach
-                                            </div>
-                                        @endif
-                                    @endforeach
-                                </div>
                             </div>
-                        @endif
-                    @endforeach
-                </ul>
+                        </div>
+                    @endif
+                @endforeach
             </div>
         </div>
     </div>
 </x-app-layout>
-
-

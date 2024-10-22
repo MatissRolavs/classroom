@@ -37,7 +37,7 @@ class TasksController extends Controller
             'creator_id' => auth()->user()->id,
         ]);
 
-        return redirect()->route('subject.show', $request->class_id)->with('message', 'Task created successfully');
+        return redirect()->route('subject.show', $request->class_id)->with('message', 'Task created successfully!');
     }
 
     /**
