@@ -79,7 +79,9 @@
                             @foreach ($comments as $comment)
                                 @if($comment->task_id == $task->id)
                                     <div class="mt-4 border-b border-gray-300 py-2">
-                                        <p><strong>{{ $comment->user ? $comment->user->name : 'Unknown User' }}:</strong> {{ $comment->comment }}</p>
+                                        @if(auth()->user()->id == $comment->user_id)
+                                            <p><strong>{{ auth()->user()->name }}:</strong> {{ $comment->comment }}</p>
+                                        @endif
                                     </div>
                                 @endif
                             @endforeach
