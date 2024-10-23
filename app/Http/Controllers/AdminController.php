@@ -8,21 +8,33 @@ use Illuminate\Http\Request;
 class AdminController extends Controller
 {
     public function index() {
+        if(auth()->user()->role != "2"){
+            return redirect()->back();
+        }
+        else{
         $users = User::all();
         
         return view("admin", ["users" => $users]);
+        }
     }
 
     public function findUser(Request $request) {
-
+        if(auth()->user()->role != "2"){
+            return redirect()->back();
+        }
+        else{
         $user = User::find($request->user_id);
 
 
         return view("admin", ["user" => $user]);
+        }
     }
 
     public function roleChange(Request $request) {
-
+        if(auth()->user()->role != "2"){
+            return redirect()->back();
+        }
+        else{
         $user = User::find($request->user_id);
         if($request->has("user_role"))
         {
@@ -32,18 +44,27 @@ class AdminController extends Controller
         }
 
         return view("admin", ["user" => $user]);
+        }
     }
 
     public function userDelete(Request $request) {
-
+        if(auth()->user()->role != "2"){
+            return redirect()->back();
+        }
+        else{
         $user = User::find($request->user_id);
         $user->delete();
 
         $users = User::all();
         return view("admin", ["users" => $users]);
+        }
     }
     
     public function userCreate(Request $request) {
+        if(auth()->user()->role != "2"){
+            return redirect()->back();
+        }
+        else{
         $request->validate([
             'name' => 'required',
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
@@ -62,5 +83,6 @@ class AdminController extends Controller
         $users = User::all();
         
         return redirect()->back()->with('message', 'User created successfully');
+        }
     }
 }

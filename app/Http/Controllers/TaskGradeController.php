@@ -29,7 +29,13 @@ class TaskGradeController extends Controller
      */
     public function store(StoreTaskGradeRequest $request)
     {
-        //
+        TaskGrade::create([
+            'task_id' => $request->task_id,
+            'user_id' => $request->student_id,
+            'grade' => $request->grade,
+        ]);
+
+        return redirect()->route('subject.show', $request->subject_id)->with('message', 'Grade created successfully');
     }
 
     /**

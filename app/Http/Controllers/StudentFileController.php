@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\StudentFile;
 use App\Http\Requests\StoreStudentFileRequest;
 use App\Http\Requests\UpdateStudentFileRequest;
+use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
 class StudentFileController extends Controller
 {
@@ -12,8 +14,10 @@ class StudentFileController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        //
+    {   
+        $users = User::all();
+        $studentFiles = StudentFile::all();
+        return view('subject.studentFiles', compact('studentFiles', "users"));
     }
 
     /**
@@ -44,15 +48,16 @@ class StudentFileController extends Controller
             "student_id" => auth()->user()->id
         ]);
    
-        return redirect()->route('subject.show', $request->task_id)->with('success', 'File uploaded successfully!');
+        return redirect()->route('subject.show', $request->subject_id)->with('success', 'File uploaded successfully!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(StudentFile $studentFile)
+    public function show($id)
     {
-        //
+        $studentFile = StudentFile::findOrFail($id);
+        return view('studentFile.show', ['studentFile' => $studentFile]);
     }
 
     /**

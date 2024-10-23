@@ -44,7 +44,7 @@ class TaskFilesController extends Controller
             "creator_id" => auth()->user()->id
         ]);
    
-        return redirect()->route('subject.show', $request->task_id)->with('success', 'File uploaded successfully!');
+        return redirect()->route('subject.show', $request->subject_id)->with('success', 'File uploaded successfully!');
     }
 
     /**

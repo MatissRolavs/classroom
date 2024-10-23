@@ -12,7 +12,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Middleware\Admin;
 use App\Http\Controllers\StudentFileController;
-
+use App\Http\Controllers\TaskGradeController;
 Route::get('/', function () {
     return redirect()->route('login');
 });
@@ -44,7 +44,11 @@ Route::middleware('auth')->group(function () {
     Route::post("/taskFiles", [TaskFilesController::class, "store"])->name("taskFiles.store");	
     Route::get("/taskFiles/{taskFiles}", [TaskFilesController::class, "show"])->name("taskFiles.show");
 
-    Route::post("/studentFiles", [StudentFileController::class, "store"])->name("studentFile.store");	
+    Route::post("/studentFiles/store", [StudentFileController::class, "store"])->name("studentFile.store");
+    Route::get("/studentFiles", [StudentFileController::class, "index"])->name("studentFile.index");
+    Route::get("/studentFile/{studentFile}", [StudentFileController::class, "show"])->name("studentFile.show");
+
+    Route::post("/grade", [TaskGradeController::class, "store"])->name("grade.store");
 
     Route::post("/comment/create", [TaskCommentsController::class, "store"])->name("comments.store");
 

@@ -10,6 +10,7 @@ use App\Models\UserSubjects;
 use App\Models\Tasks;
 use App\Models\TaskFiles;
 use App\Models\User;
+use App\Models\StudentFile;
 class SubjectController extends Controller
 {
     /**
@@ -55,11 +56,12 @@ class SubjectController extends Controller
      */
     public function show(subject $subject)
     {   
+        $studentFiles = StudentFile::all();
         $users = User::all();
         $tasks = Tasks::all();
         $taskFiles = TaskFiles::all();
         $comments = TaskComments::all();
-        return view('subject.show', compact('subject','tasks','taskFiles',"comments","users"));
+        return view('subject.show', compact('subject','tasks','taskFiles',"comments","users","studentFiles"));
     }
 
     /**

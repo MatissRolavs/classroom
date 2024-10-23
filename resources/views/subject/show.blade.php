@@ -72,12 +72,50 @@
                                 @endif
                             @endforeach
                             @if(auth()->user()->role == "1" || auth()->user()->role == "2")
+                            <h1>Student Files</h1>
+
+                            <ul>
+                                @foreach($users as $user)
+                                    @foreach($studentFiles as $studentFile)
+                                        @if($studentFile->task_id == $task->id)
+                                        @if($user->id == $studentFile->student_id)
+                                        <li>
+                                            <p>{{$user->name}} :</p><a href="{{ route('studentFile.show', $studentFile->id) }}" class="text-blue-600 underline mt-2 block">View file</a>
+                                        </li>
+                                        <form action="{{ route('grade.store') }}" method="POST" class="mt-4">
+                                            @csrf
+                                            <div class="flex items-center bg-white p-6 rounded-lg shadow-md">
+                                                <input type="text" name="grade" placeholder="Enter grade for {{$user->name}}" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                <input type="hidden" name="task_id" value="{{ $task->id }}">
+                                                <input type="hidden" name="student_id" value="{{ $user->id }}">
+                                                <input type="hidden" name="subject_id" value="{{ $subject->id }}">
+                                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 ml-4">
+                                                    Upload
+                                                </button>
+                                            </div>
+                                        </form>
+                                        @endif
+                                        @endif
+                                    @endforeach
+                                @endforeach
+                            </ul>
+                            @endif
+                            @if(auth()->user()->role == "0")
+                            Your files:
+                            @foreach($studentFiles as $studentFile)
+                                @if($studentFile->student_id == auth()->user()->id && $studentFile->task_id == $task->id)
+                                    <a href="{{ route('studentFile.show', $studentFile->id) }}" class="text-blue-600 underline mt-2 block">View file</a>
+                                @endif
+                            @endforeach
+                            @endif
+                            @if(auth()->user()->role == "1" || auth()->user()->role == "2")
                             <!-- File Upload Form -->
                             <form action="{{ route('taskFiles.store') }}" method="POST" enctype="multipart/form-data" class="mt-4">
                                 @csrf
                                 <div class="flex items-center bg-white p-6 rounded-lg shadow-md">
                                     <input type="file" name="file" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                     <input type="hidden" name="task_id" value="{{ $task->id }}">
+                                    <input type="hidden" name="subject_id" value="{{ $subject->id }}">
                                     <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 ml-4">
                                         Upload
                                     </button>
@@ -90,6 +128,7 @@
                                     <input type="file" name="file" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                     <input type="hidden" name="task_id" value="{{ $task->id }}">
                                     <input type="hidden" name="student_id" value="{{ auth()->user()->id }}">
+                                    <input type="hidden" name="subject_id" value="{{ $subject->id }}">
                                     <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 ml-4">
                                         Upload
                                     </button>
