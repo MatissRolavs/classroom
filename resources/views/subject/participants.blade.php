@@ -1,16 +1,17 @@
-<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="p-6 bg-white border-b border-gray-200">
-            <h1 class="text-3xl font-bold">Participants</h1>
-            <ul class="mt-4">
-                @foreach($user_subjects as $user_subject)
-                    @foreach($users as $user)
-                        @if($user->id == $user_subject->user_id && $user_subject->subject_id == request()->route('subject'))
-                            <li class="mt-2">{{ $user->name }}</li>
-                        @endif
-                    @endforeach
+<x-app-layout>
+<div class="flex justify-center items-center min-h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-md max-w-6xl w-full">
+        <h1 class="text-3xl font-bold">Participants</h1>
+        <p class="mt-4">Total Participants: {{ $user_subjects->where('subject_id', request()->route('subject'))->count() }}</p>
+        <ol class="mt-4 list-decimal">
+            @foreach($user_subjects as $key => $user_subject)
+                @foreach($users as $user)
+                    @if($user->id == $user_subject->user_id && $user_subject->subject_id == request()->route('subject'))
+                        <li class="mt-2">{{ $user->name }}</li>
+                    @endif
                 @endforeach
-            </ul>
-        </div>
+            @endforeach
+        </ol>
     </div>
 </div>
+</x-app-layout>
