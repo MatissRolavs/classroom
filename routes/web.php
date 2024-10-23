@@ -25,13 +25,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-
+    
     Route::get("/create/class", [SubjectController::class, "create"])->name("subject.create");
     Route::post("/create/class", [SubjectController::class, "store"])->name("subject.store");
     Route::get("/classes", [SubjectController::class, "index"])->name("subject.index");
     Route::get("/classes/{subject}", [SubjectController::class, "show"])->name("subject.show");
 
+    Route::get('/admin', [adminController::class, 'index']);
+    Route::get('/admin/findUser', [adminController::class, 'findUser']);
+    Route::get('/admin/roleChange', [adminController::class, 'roleChange']);
+    Route::delete('/admin/userDelete', [adminController::class, 'userDelete']);
+    Route::post("/admin/userCreate", [AdminController::class, "userCreate"]);
 
     Route::post("/classes", [UserSubjectsController::class, "store"])->name("user_subjects.store");
     Route::delete("/classes/{subject}/leave", [SubjectController::class, "leave"])->name("subject.leave");

@@ -28,7 +28,11 @@ class SubjectController extends Controller
      */
     public function create()
     {
-        return view('subject.create');
+        if (auth()->user()->role === "1" || auth()->user()->role === "2") {
+            return view('subject.create');
+        } else {
+            return redirect()->route('subject.index');
+        }
     }
 
     /**

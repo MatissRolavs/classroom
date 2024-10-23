@@ -25,7 +25,26 @@
                             @endif
                         @endforeach
                     @endforeach
-
+                    @foreach($subjects as $index => $subject)
+                            @if($subject->creator_id == auth()->user()->id)
+                                <div class="mt-4">
+                                    <p>Your created class</p>
+                                    <p>Group name: {{ $subject->group }}</p>
+                                    <p>Link to group: <a href="{{ route('subject.show', $subject->id) }}" class="text-blue-600 underline">
+                                        {{ $subject->name }}
+                                    </a>
+                                    </p>
+                                </div>
+                                <hr class="my-4">
+                            @endif
+                    @endforeach
+                    @if(auth()->user()->role == "1" || auth()->user()->role == "2")
+                        <div class="mt-4">
+                            <a href="{{ route('subject.create') }}" class="bg-green-600 text-white px-6 py-2 mt-4 rounded-md cursor-pointer">
+                                Create new subject
+                            </a>
+                        </div>
+                    @endif
                     <form action="{{ route('user_subjects.store') }}" method="POST" class="mt-8">
                         @csrf
                         <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
