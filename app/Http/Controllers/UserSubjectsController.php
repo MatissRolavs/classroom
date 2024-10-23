@@ -78,6 +78,4 @@ class UserSubjectsController extends Controller
     {
         //
     }
-    
-   
 }

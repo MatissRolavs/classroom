@@ -10,11 +10,13 @@
             @endforeach
                 <a href="{{ route('subject.participants', $subject->id) }}" class="bg-white p-6 rounded-lg shadow-md col-span-1">View all participants</a>
                 <div class="bg-white p-6 rounded-lg shadow-md col-span-3">
-                    <h1 class="text-3xl font-bold">{{ $subject->name }}</h1>
-                    <p class="mt-4 text-lg">{{ $subject->description }}</p>
-                    <button type="button" class="mt-4 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700" onclick="this.outerHTML = '{{ $subject->code }}'">
+                    <h1 class="text-3xl font-bold">Name: {{ $subject->name }}</h1>
+                    <p class="mt-4 text-lg">Description: {{ $subject->description }}</p>
+                    <p>Invite code: 
+                        <button type="button" class="mt-4 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700" onclick="this.outerHTML = '{{ $subject->code }}'">
                         Show invite code
-                    </button>
+                        </button>
+                    </p>
 
                     <form action="{{ route('subject.leave', $subject->id) }}" method="POST" class="mt-8">
                         @csrf
