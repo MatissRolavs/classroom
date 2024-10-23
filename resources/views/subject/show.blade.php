@@ -83,6 +83,18 @@
                                     </button>
                                 </div>
                             </form>
+                            @else
+                            <form action="{{ route('studentFile.store') }}" method="POST" enctype="multipart/form-data" class="mt-4">
+                                @csrf
+                                <div class="flex items-center bg-white p-6 rounded-lg shadow-md">
+                                    <input type="file" name="file" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <input type="hidden" name="task_id" value="{{ $task->id }}">
+                                    <input type="hidden" name="student_id" value="{{ auth()->user()->id }}">
+                                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 ml-4">
+                                        Upload
+                                    </button>
+                                </div>
+                            </form>
                             @endif
                             <!-- Comments Section -->
                             <div class="bg-white p-6 rounded-lg shadow-md mt-8">

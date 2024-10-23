@@ -11,7 +11,7 @@ use App\Http\Controllers\TaskFilesController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Middleware\Admin;
-
+use App\Http\Controllers\StudentFileController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::post("/tasks", [TasksController::class, "store"])->name("task.store");
     Route::post("/taskFiles", [TaskFilesController::class, "store"])->name("taskFiles.store");	
     Route::get("/taskFiles/{taskFiles}", [TaskFilesController::class, "show"])->name("taskFiles.show");
+
+    Route::post("/studentFiles", [StudentFileController::class, "store"])->name("studentFile.store");	
 
     Route::post("/comment/create", [TaskCommentsController::class, "store"])->name("comments.store");
 
