@@ -25,7 +25,7 @@
         }
         .day {
             border: 1px solid #ddd;
-            padding: 10px;
+            padding: 20px;
             text-align: center;
             background: white;
         }
@@ -59,6 +59,11 @@
         .empty-day {
             background-color: #f1f1f1;
         }
+        .task-title {
+            font-size: 16px;
+            color: #0d6efd;
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -86,10 +91,29 @@
             $endDay = $startOfMonth->copy()->endOfMonth()->endOfWeek(); // Last day of the month plus days until the end of the week
         @endphp
 
+        @foreach ($tasks as $task)
+            @if (Carbon\Carbon::parse($task->due_date)->month == $month && Carbon\Carbon::parse($task->due_date)->year == $year)
+                @php
+                    $taskDay = Carbon\Carbon::parse($task->due_date)->format('j');
+                @endphp
+            @endif
+        @endforeach
+
         @for ($day = $startDay; $day->lte($endDay); $day->addDay())
             <div class="day">
-                @if ($day->month == $month)
                     {{ $day->day }}
+                    @if ($day->month == $month)
+                    @foreach ($user_subjects as $user_subject)
+                        @foreach($subjects as $subject)
+                        @if ($user_subject->user_id == auth()->user()->id && $user_subject->subject_id == $subject->id)
+                            @foreach ($tasks as $task)
+                                @if ($task->class_id == $user_subject->subject_id && Carbon\Carbon::parse($task->due_date)->format('j') == $day->format('j'))
+                                    <div class="task-title"><a href="{{ route('subject.show', $user_subject->subject_id) }}">{{ $task->title }}</a></div>
+                                @endif
+                            @endforeach
+                        @endif
+                        @endforeach
+                    @endforeach
                 @else
                     <span class="empty-day">&nbsp;</span> <!-- Handle empty days -->
                 @endif
@@ -115,3 +139,4 @@
 </body>
 </html>
 </x-app-layout>
+

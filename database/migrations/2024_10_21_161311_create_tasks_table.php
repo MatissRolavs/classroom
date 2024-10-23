@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('description');
             $table->integer('class_id');
             $table->integer("creator_id");
+            $table->date("due_date");
             $table->timestamps();
         });
     }

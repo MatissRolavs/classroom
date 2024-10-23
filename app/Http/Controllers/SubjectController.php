@@ -96,6 +96,7 @@ class SubjectController extends Controller
     public function participants(){
         $user_subjects = UserSubjects::all();
         $users = User::all();
-        return view("subject.participants", compact("user_subjects", "users"));
+        $subjects = subject::all();
+        return view("subject.participants", compact("user_subjects", "users", "subjects"));
     }
 }

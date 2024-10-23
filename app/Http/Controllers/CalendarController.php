@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\Subject;
+use App\Models\Tasks;
+use App\Models\UserSubjects;
 
 class CalendarController extends Controller
 {
@@ -26,7 +28,8 @@ class CalendarController extends Controller
         $nextMonth = $date->copy()->addMonth()->month;
 
         $subjects = Subject::all();
-
-        return view('calendar', compact('daysInMonth', 'monthName', 'year', 'month', 'previousMonth', 'nextMonth', 'subjects'));
+        $tasks = Tasks::all();
+        $user_subjects = UserSubjects::all();
+        return view('calendar', compact('daysInMonth', 'monthName', 'year', 'month', 'previousMonth', 'nextMonth', 'subjects', 'tasks', 'user_subjects'));	
     }
 }

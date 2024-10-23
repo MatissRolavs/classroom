@@ -12,12 +12,16 @@
                 <div class="bg-white p-6 rounded-lg shadow-md col-span-3">
                     <h1 class="text-3xl font-bold">Name: {{ $subject->name }}</h1>
                     <p class="mt-4 text-lg">Description: {{ $subject->description }}</p>
+                    @if(auth()->user()->role == "1" || auth()->user()->role == "2")
                     <p>Invite code: 
                         <button type="button" class="mt-4 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700" onclick="this.outerHTML = '{{ $subject->code }}'">
                         Show invite code
                         </button>
                     </p>
-
+                    @endif
+                @if($subject->creator_id == auth()->user()->id)
+                    <button>Delete subject</button>
+                @else
                     <form action="{{ route('subject.leave', $subject->id) }}" method="POST" class="mt-8">
                         @csrf
                         @method('DELETE')
@@ -26,12 +30,13 @@
                         </button>
                     </form>
                 </div>
+                @endif
             @else
                 <div class="bg-white p-6 rounded-lg shadow-md col-span-3">
                     <p>Subject not found.</p>
                 </div>
             @endif
-
+            @if(auth()->user()->role == "1" || auth()->user()->role == "2")
             <!-- Task Creation Box -->
             <div class="col-span-3 flex justify-center">
                 <div class="bg-white p-6 rounded-lg shadow-md w-2/3">
@@ -41,21 +46,24 @@
                         <input type="hidden" name="class_id" value="{{ $subject->id }}">
                         <input name="title" id="title" placeholder="Enter task name" required class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         <input name="description" id="description" placeholder="Enter task description" required class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <label for="due_date" class="block text-sm font-medium text-gray-700">Select due date:</label> 
+                        <input name="due_date" id="due_date" type="date" placeholder="Select due date" required class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" min="{{ date('Y-m-d') }}">
                         <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 mt-4">
                             Create
                         </button>
                     </form>
                 </div>
             </div>
-
+            @endif
             <!-- Task List -->
             <h2 class="text-2xl font-bold text-center col-span-3">Task List</h2>
             <div class="col-span-3">
-                @foreach($tasks as $task)
+                @foreach($tasks->sortByDesc('created_at') as $task)
                     @if($task->class_id == $subject->id)
                         <div class="bg-white p-6 rounded-lg shadow-md mt-4">
                             <h3 class="text-xl font-bold"> {{ $task->title }}</h3>
                             <p class="mt-2">{{ $task->description }}</p>
+                            <p class="mt-2">Due Date: {{ date('j F Y', strtotime($task->due_date)) }}</p>
 
                             <!-- Task Files Section -->
                             @foreach($taskFiles as $taskFile)
@@ -63,7 +71,7 @@
                                     <a href="{{ route('taskFiles.show', $taskFile->id) }}" class="text-blue-600 underline mt-2 block">View file</a>
                                 @endif
                             @endforeach
-
+                            @if(auth()->user()->role == "1" || auth()->user()->role == "2")
                             <!-- File Upload Form -->
                             <form action="{{ route('taskFiles.store') }}" method="POST" enctype="multipart/form-data" class="mt-4">
                                 @csrf
@@ -75,11 +83,11 @@
                                     </button>
                                 </div>
                             </form>
-
+                            @endif
                             <!-- Comments Section -->
                             <div class="bg-white p-6 rounded-lg shadow-md mt-8">
                                 <h3 class="text-2xl font-bold">Comments</h3>
-                                @foreach($comments as $comment)
+                                @foreach($comments->sortByDesc('created_at') as $comment)
                                     @if($comment->task_id == $task->id)
                                         <div class="mt-4 border-b border-gray-300 py-2">
                                             @foreach($users as $user)
@@ -104,6 +112,7 @@
                         </div>
                     @endif
                 @endforeach
+                
             </div>
         </div>
     </div>

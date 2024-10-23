@@ -35,6 +35,7 @@ class TasksController extends Controller
             'description' => $request->description,
             'class_id' => $request->class_id,
             'creator_id' => auth()->user()->id,
+            "due_date" => $request->due_date
         ]);
 
         return redirect()->route('subject.show', $request->class_id)->with('message', 'Task created successfully!');
