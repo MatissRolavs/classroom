@@ -5,7 +5,7 @@
             @if($subject)
             @foreach($users as $user)
                 @if($subject->creator_id == $user->id)
-                <h1>Created by {{ $user->name }}</h1>
+                <h1 class="text-xl font-bold">Created by {{ $user->name }}</h1>
                 @endif
             @endforeach
                 <a href="{{ route('subject.participants', $subject->id) }}" class="bg-white p-6 rounded-lg shadow-md col-span-1">View all participants</a>
@@ -61,8 +61,8 @@
                 @foreach($tasks->sortByDesc('created_at') as $task)
                     @if($task->class_id == $subject->id)
                         <div class="bg-white p-6 rounded-lg shadow-md mt-4">
-                            <h3 class="text-xl font-bold"> {{ $task->title }}</h3>
-                            <p class="mt-2">{{ $task->description }}</p>
+                            <h3 class="text-xl font-bold">Name: {{ $task->title }}</h3>
+                            <p class="mt-2">Description: {{ $task->description }}</p>
                             <p class="mt-2">Due Date: {{ date('j F Y', strtotime($task->due_date)) }}</p>
 
                             <!-- Task Files Section -->
@@ -72,7 +72,7 @@
                                 @endif
                             @endforeach
                             @if(auth()->user()->role == "1" || auth()->user()->role == "2")
-                            <h1>Student Files</h1>
+                            <h1 class="text-xl font-bold">Student Files:</h1>
 
                             <ul>
                                 @foreach($users as $user)
@@ -138,6 +138,15 @@
                             <!-- Comments Section -->
                             <div class="bg-white p-6 rounded-lg shadow-md mt-8">
                                 <h3 class="text-2xl font-bold">Comments</h3>
+                                <!-- Add Comment Form -->
+                                <form method="POST" action="{{ route('comments.store') }}" class="mt-4">
+                                    @csrf
+                                    <input type="hidden" name="task_id" value="{{ $task->id }}">
+                                    <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                                    <input type="hidden" name="class_id" value="{{ $task->class_id }}">
+                                    <textarea name="comment" id="comment" cols="30" rows="4" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Leave a comment..."></textarea>
+                                    <button type="submit" class="bg-green-600 text-white px-6 py-2 mt-4 rounded-md cursor-pointer">Comment</button>
+                                </form>
                                 @foreach($comments->sortByDesc('created_at') as $comment)
                                     @if($comment->task_id == $task->id)
                                         <div class="mt-4 border-b border-gray-300 py-2">
@@ -149,16 +158,6 @@
                                         </div>
                                     @endif
                                 @endforeach
-
-                                <!-- Add Comment Form -->
-                                <form method="POST" action="{{ route('comments.store') }}" class="mt-4">
-                                    @csrf
-                                    <input type="hidden" name="task_id" value="{{ $task->id }}">
-                                    <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-                                    <input type="hidden" name="class_id" value="{{ $task->class_id }}">
-                                    <textarea name="comment" id="comment" cols="30" rows="4" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Leave a comment..."></textarea>
-                                    <button type="submit" class="bg-green-600 text-white px-6 py-2 mt-4 rounded-md cursor-pointer">Comment</button>
-                                </form>
                             </div>
                         </div>
                     @endif
